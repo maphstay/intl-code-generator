@@ -1,0 +1,201 @@
+:root {
+    --primary-color: #FFFFFF;
+    --secondary-color: #000000;
+    --background-hover: rgb(219, 219, 219);
+    --bg-dark: #212529!important;
+    --font-color: #adb5bd!important;
+    --bg-dark-opacity: 0.1!important;
+}
+
+body {
+    transition: background 0.2s linear;
+}
+
+.bg-body-tertiary {
+    background-color: rgb(241, 241, 241) !important;
+    box-shadow: 0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+}
+
+.title {
+    margin: 50px;
+}
+
+.resultcode {
+    margin: 50px;
+}
+
+.container-datetime {
+    text-align: center;
+}
+
+.container-number {
+    text-align: center;
+}
+
+.container-currency {
+    text-align: center;
+}
+
+.context {
+    display: flex;
+    position: absolute;
+    padding: 0 10px 0 10px;
+}
+
+.selects-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    padding: 0 10px 0 10px;
+}
+
+.inputs-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px 0 10px;
+    margin: 50px;
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    
+}
+
+.form-select {
+    padding-bottom: 5px !important;
+
+}
+
+.text-area-result {
+    white-space: nowrap;
+    width: 500px;
+    height: 20px;
+    resize: none;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.text-area-w-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px !important;
+}
+
+.label {
+    display: block;
+}
+
+.label-text-area {
+    display: block;
+}
+
+.container textarea {
+    width: 300px;
+    height: 150px;
+    resize: none;
+}
+
+.text-area-w-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.copy-button {
+    margin-top: 24px;
+    padding-bottom: 5px;
+}
+
+.input-group-sm {
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+}
+
+.input-number {
+    text-align: center;
+}
+
+.input-currency {
+    text-align: center;
+}
+
+/** DARK THEME */
+.dark {
+    background-color: var(--bg-dark);
+    color: var(--font-color);
+}
+
+.dark .bg-body-tertiary {
+    background-color: rgba(248, 249, 250, var(--bg-dark-opacity)) !important;
+}
+.dark .navbar-brand {
+    color: var(--font-color);
+}
+
+/** TOGGLE BUTTON */
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+#lbl-chk {
+    background-color: #111;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    position: relative;
+    height: 18px;
+    width: 36px;
+    transform: scale(1.5);
+    margin-right: 50px
+}
+
+.label .ball {
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 14px;
+    width: 14px;
+    transform: translateX(0px);
+    transition: transform 0.2s linear;
+}
+
+.checkbox:checked+.label .ball {
+    transform: translateX(18px);
+}
+
+.moon {
+    width: 12px !important;
+    height: 13px !important;
+}
+
+.sun {
+    width: 12px !important;
+    height: 13px !important;
+}
+
+/** OVERRIDE BOOTSTRAP */
+.navbar-collapse {
+    display: contents !important;
+}
+
+.navbar-expand-lg {
+    padding: 8px 20px 8px 20px ;
+}
+
+.navbar-brand {
+    vertical-align: middle;
+    line-height: 1.5
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" async></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+      async
+    ></script>
+    <title>Intl code generator</title>
+  </head>
+
+  <body class="" onload="onLoadPage()">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <div class="navbar-collapse d-lg-flex" id="navbarsExample10">
+          <span class="navbar-brand col-lg-3 me-0">Intl Code Generator</span>
+          <ul class="nav nav-pills col-lg-6 justify-content-lg-center" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="pills-currency-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-currency"
+                type="button"
+                role="tab"
+                aria-controls="pills-currency"
+                aria-selected="true"
+                onclick="getContent()"
+              >
+                Currency
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="pills-dateTime-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-dateTime"
+                type="button"
+                role="tab"
+                aria-controls="pills-dateTime"
+                aria-selected="false"
+                onclick="getContent()"
+              >
+                Date/Time
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="pills-number-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-number"
+                type="button"
+                role="tab"
+                aria-controls="pills-number"
+                aria-selected="false"
+                onclick="getContent()"
+              >
+                Number
+              </button>
+            </li>
+          </ul>
+          <div class="d-lg-flex col-lg-3 justify-content-lg-end one-quarter nav-link" id="switch">
+            <input type="checkbox" class="checkbox" id="chk" />
+            <label class="label" for="chk" id="lbl-chk">
+              <img class="moon" src="assets/moon-fill.svg" alt="moon" />
+              <img class="sun" src="assets/sun-fill.svg" alt="sun" />
+              <div class="ball"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="tab-content" id="pills-tabContent">
+      <!-- CURRENCY SECTOR -->
+      <div class="tab-pane fade show active" id="pills-currency" role="tabpanel" aria-labelledby="pills-currency-tab">
+        <div id="currency-content" class="container-currency">
+          <h1 class="title">Currency Configuration</h1>
+
+          <div class="selects-container">
+            <div class="select-container form-floating">
+              <select class="form-select" name="locales" id="localescurrency" onchange="sanitizeCurrencyInput()">
+                <option value="" hidden></option>
+              </select>
+              <label for="locales" class="label">Locales</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="currencies" id="currencies" onchange="sanitizeCurrencyInput();">
+                <option value="" hidden></option>
+              </select>
+              <label for="currencies" class="label">Currencies</label>
+            </div>
+
+            <div class="select-container form-floating" title="Choose style Currency to see effect">
+              <select
+                class="form-select"
+                name="currencyDisplay"
+                id="currencyDisplay"
+                onchange="sanitizeCurrencyInput()"
+              ></select>
+              <label for="currencyDisplay" class="label">Currencies display</label>
+            </div>
+          </div>
+          <div class="inputs-container">
+            <div class="input-group-sm">
+              <input
+                id="valuecurrency"
+                type="text"
+                class="form-control input-currency"
+                placeholder="Type a number"
+                onchange="sanitizeCurrencyInput()"
+              />
+            </div>
+          </div>
+
+          <h2 class="resultcode" id="resultcurrency">Result will be shown here...</h2>
+
+          <div class="text-area-w-button">
+            <div class="select-container">
+              <label for="resultcode" class="label-text-area">Code snippet to the result above:</label>
+              <textarea class="text-area-result form-control" id="resultcodecurrency" disabled></textarea>
+            </div>
+            <button id="copybuttoncurrency" class="copy-button btn btn-primary" onclick="copyToClipboardCurrency()">
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATETIME SECTOR -->
+      <div class="tab-pane fade" id="pills-dateTime" role="tabpanel" aria-labelledby="pills-dateTime-tab">
+        <div id="datetime-content" class="container-datetime">
+          <h1 class="title">Date/Time Configuration</h1>
+
+          <div class="selects-container">
+            <div class="select-container form-floating">
+              <select class="form-select" name="locales" id="localesdatetime">
+                <option value="" hidden></option>
+              </select>
+              <label for="locales" class="label">Locales</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="timezones" id="timezones">
+                <option value="" selected>Choose an option...</option>
+              </select>
+              <label for="timezones" class="label">Timezones</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="timestyle" id="timestyle"></select>
+              <label for="timestyle" class="label">Timestyle</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="datestyle" id="datestyle"></select>
+              <label for="datestyle" class="label">Datestyle</label>
+            </div>
+          </div>
+
+          <h2 class="resultcode" id="resultdatetime">Result will be shown here...</h2>
+
+          <div class="text-area-w-button">
+            <div class="select-container">
+              <label for="resultcode" class="label-text-area">Code snippet to the result above:</label>
+              <textarea class="text-area-result form-control" id="resultcodedatetime" disabled></textarea>
+            </div>
+            <button id="copybuttondatetime" class="copy-button btn btn-primary" onclick="copyToClipboardDatetime()">
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NUMBER SECTOR -->
+      <div class="tab-pane fade" id="pills-number" role="tabpanel" aria-labelledby="pills-number-tab">
+        <div id="number-content" class="container-number">
+          <h1 class="title">Currency/Unit Configuration</h1>
+
+          <div class="selects-container">
+            <div class="select-container form-floating">
+              <select class="form-select" name="locales" id="localesnumber" onchange="sanitizeNumberInput()">
+                <option value="" hidden></option>
+              </select>
+              <label for="locales" class="label">Locales</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="styles" id="styles" onchange="sanitizeNumberInput()"></select>
+              <label for="style" class="label">Style</label>
+            </div>
+
+            <div class="select-container form-floating">
+              <select class="form-select" name="units" id="units" onchange="sanitizeNumberInput()">
+                <option value="" selected>Choose an option...</option>
+              </select>
+              <label for="units" class="label">Units</label>
+            </div>
+          </div>
+          <div class="inputs-container">
+            <div class="input-group-sm">
+              <input
+                id="valuenumber"
+                type="text"
+                class="form-control input-number"
+                placeholder="Type a number"
+                onchange="sanitizeNumberInput()"
+              />
+            </div>
+          </div>
+
+          <h2 class="resultcode" id="resultnumber">Result will be shown here...</h2>
+
+          <div class="text-area-w-button">
+            <div class="select-container">
+              <label for="resultcode" class="label-text-area">Code snippet to the result above:</label>
+              <textarea class="text-area-result form-control" id="resultcodenumber" disabled></textarea>
+            </div>
+            <button id="copybuttonnumber" class="copy-button btn btn-primary" onclick="copyToClipboardNumber()">
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
