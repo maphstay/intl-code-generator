@@ -29,9 +29,9 @@ const copyButtonDatetime = document.querySelector('#copybuttondatetime');
 /** NUMBERS */
 const numberContent = document.querySelector('#number-content');
 const localeSelectNumber = document.querySelector('#localesnumber');
-const styleSelectNumber = document.querySelector('#styles');
 const resultNumber = document.querySelector('#resultnumber');
 const resultCodeNumber = document.querySelector('#resultcodenumber');
+const unityDisplaySelect = document.querySelector('#unitdisplay');
 const unitsSelect = document.querySelector('#units');
 const copyButtonNumber = document.querySelector('#copybuttonnumber');
 const numberValue = document.querySelector('#valuenumber');
@@ -42,7 +42,7 @@ const onLoadPage = async () => {
     { element: currencyDisplaySelect, source: 'currencyDisplay' },
     { element: timeStyleSelect, source: 'dateTime' },
     { element: dateStyleSelect, source: 'dateTime' },
-    { element: styleSelectNumber, source: 'number' },
+    { element: unityDisplaySelect, source: 'unit' },
   ];
   await checkTheme();
   await getLocales();
@@ -103,9 +103,10 @@ const getContent = async () => {
 
 const getSelectOptions = async ({ element, source }) => {
   const dateTimeOptions = ['choose an option...', 'full', 'long', 'medium', 'short'];
-  const numberOptions = ['choose an option...', 'decimal', 'percent'];
   const currencyDisplayOptions = ['choose an option...', 'code', 'name', 'symbol'];
-  let options = source === 'number' ? numberOptions : source === 'dateTime' ? dateTimeOptions : currencyDisplayOptions;
+  const unitDisplayOptions = ['choose an option...', 'long', 'narrow', 'short'];
+  let options =
+    source === 'unit' ? unitDisplayOptions : source === 'dateTime' ? dateTimeOptions : currencyDisplayOptions;
 
   for (let i = 0; i < options.length; i++) {
     const formatedOption = options[i].slice(0, 1).toUpperCase() + options[i].slice(1);
@@ -151,10 +152,6 @@ const showCurrencyResult = async (typedValue) => {
 };
 
 const currencyCodeGenerator = async (locale, currencyFormatOptions, typedValue) => {
-  for (const key in currencyFormatOptions) {
-    // console.log(key);
-    // const element = object[key];
-  }
   let { currency, currencyDisplay } = currencyFormatOptions;
   currency = currency?.length ? `, currency: '${currency}'` : '';
   currencyDisplay = currencyDisplay?.length ? `, currencyDisplay: '${currencyDisplay}'` : '';
@@ -243,15 +240,12 @@ const sanitizeNumberInput = async () => {
 const showNumberResult = async (typedValue) => {
   localeSelectNumber.value = localeSelectNumber.value.length ? localeSelectNumber.value : navigator.language;
   const choosenLocale = localeSelectNumber.value;
-  const choosenStyle = styleSelectNumber.value;
-  //   const choosenDateStyle = dateStyleSelect.value;
-  const numberFormatOptions = {};
+  const choosenUnitDisplay = unityDisplaySelect.value;
+  const choosenUnit = unitsSelect.value;
+  const numberFormatOptions = { style: 'unit' };
 
-  numberFormatOptions['style'] = choosenStyle.length ? choosenStyle : 'decimal';
-  // choosenCurrency.length ? numberFormatOptions['currency'] = choosenCurrency
-
-  //   dateTimeFormatOptions['timeStyle'] = choosenTimeStyle.length ? choosenTimeStyle : 'long';
-  //   dateTimeFormatOptions['dateStyle'] = choosenDateStyle.length ? choosenDateStyle : 'long';
+  numberFormatOptions['unitDisplay'] = choosenUnitDisplay.length ? choosenUnitDisplay : 'long';
+  numberFormatOptions['unit'] = choosenUnit.length ? choosenUnit : 'acre';
 
   const formatedResult = Intl.NumberFormat(`${choosenLocale}`, numberFormatOptions).format(typedValue);
 
@@ -261,13 +255,11 @@ const showNumberResult = async (typedValue) => {
 };
 
 const numberCodeGenerator = async (locale, numberFormatOptions, typedValue) => {
-  for (const key in numberFormatOptions) {
-    // console.log(key);
-    // const element = object[key];
-  }
-  let { style } = numberFormatOptions;
+  let { style, unitDisplay, unit } = numberFormatOptions;
   style = `style: '${style}'`;
-  resultCodeNumber.innerHTML = `Intl.NumberFormat('${locale}', { ${style} }).format(${typedValue})`;
+  unitDisplay = `unitDisplay: '${unitDisplay}'`;
+  unit = `unit: '${unit}'`;
+  resultCodeNumber.innerHTML = `Intl.NumberFormat('${locale}', { ${style}, ${unitDisplay}, ${unit} }).format(${typedValue})`;
 };
 
 const copyToClipboardNumber = async () => {
