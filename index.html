@@ -64,16 +64,16 @@
             <li class="nav-item" role="presentation">
               <button
                 class="nav-link"
-                id="pills-number-tab"
+                id="pills-measurement-tab"
                 data-bs-toggle="pill"
-                data-bs-target="#pills-number"
+                data-bs-target="#pills-measurement"
                 type="button"
                 role="tab"
-                aria-controls="pills-number"
+                aria-controls="pills-measurement"
                 aria-selected="false"
                 onclick="getContent()"
               >
-                Number
+                Measurement
               </button>
             </li>
           </ul>
@@ -191,26 +191,31 @@
         </div>
       </div>
 
-      <!-- NUMBER SECTOR -->
-      <div class="tab-pane fade" id="pills-number" role="tabpanel" aria-labelledby="pills-number-tab">
-        <div id="number-content" class="container-number">
-          <h1 class="title">Currency/Unit Configuration</h1>
+      <!-- MEASUREMENTS SECTOR -->
+      <div class="tab-pane fade" id="pills-measurement" role="tabpanel" aria-labelledby="pills-measurement-tab">
+        <div id="measurement-content" class="container-measurement">
+          <h1 class="title">Measurement Units Configuration</h1>
 
           <div class="selects-container">
             <div class="select-container form-floating">
-              <select class="form-select" name="locales" id="localesnumber" onchange="sanitizeNumberInput()">
+              <select class="form-select" name="locales" id="localesmeasurement" onchange="sanitizeMeasurementInput()">
                 <option value="" hidden></option>
               </select>
               <label for="locales" class="label">Locales</label>
             </div>
 
             <div class="select-container form-floating">
-              <select class="form-select" name="styles" id="styles" onchange="sanitizeNumberInput()"></select>
-              <label for="style" class="label">Style</label>
+              <select
+                class="form-select"
+                name="unitdisplay"
+                id="unitdisplay"
+                onchange="sanitizeMeasurementInput()"
+              ></select>
+              <label for="unitdisplay" class="label">Unit Display</label>
             </div>
 
             <div class="select-container form-floating">
-              <select class="form-select" name="units" id="units" onchange="sanitizeNumberInput()">
+              <select class="form-select" name="units" id="units" onchange="sanitizeMeasurementInput()">
                 <option value="" selected>Choose an option...</option>
               </select>
               <label for="units" class="label">Units</label>
@@ -219,23 +224,27 @@
           <div class="inputs-container">
             <div class="input-group-sm">
               <input
-                id="valuenumber"
+                id="valuemeasurement"
                 type="text"
-                class="form-control input-number"
+                class="form-control input-measurement"
                 placeholder="Type a number"
-                onchange="sanitizeNumberInput()"
+                onchange="sanitizeMeasurementInput()"
               />
             </div>
           </div>
 
-          <h2 class="resultcode" id="resultnumber">Result will be shown here...</h2>
+          <h2 class="resultcode" id="resultmeasurement">Result will be shown here...</h2>
 
           <div class="text-area-w-button">
             <div class="select-container">
               <label for="resultcode" class="label-text-area">Code snippet to the result above:</label>
-              <textarea class="text-area-result form-control" id="resultcodenumber" disabled></textarea>
+              <textarea class="text-area-result form-control" id="resultcodemeasurement" disabled></textarea>
             </div>
-            <button id="copybuttonnumber" class="copy-button btn btn-primary" onclick="copyToClipboardNumber()">
+            <button
+              id="copybuttonmeasurement"
+              class="copy-button btn btn-primary"
+              onclick="copyToClipboardMeasurement()"
+            >
               Copy
             </button>
           </div>

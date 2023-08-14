@@ -26,15 +26,15 @@ const resultDateTime = document.querySelector('#resultdatetime');
 const resultCodeDatetime = document.querySelector('#resultcodedatetime');
 const copyButtonDatetime = document.querySelector('#copybuttondatetime');
 
-/** NUMBERS */
-const numberContent = document.querySelector('#number-content');
-const localeSelectNumber = document.querySelector('#localesnumber');
-const styleSelectNumber = document.querySelector('#styles');
-const resultNumber = document.querySelector('#resultnumber');
-const resultCodeNumber = document.querySelector('#resultcodenumber');
+/** MEASUREMENTS */
+const measurementContent = document.querySelector('#measurement-content');
+const localeSelectMeasurement = document.querySelector('#localesmeasurement');
+const resultMeasurement = document.querySelector('#resultmeasurement');
+const resultCodeMeasurement = document.querySelector('#resultcodemeasurement');
+const unityDisplaySelect = document.querySelector('#unitdisplay');
 const unitsSelect = document.querySelector('#units');
-const copyButtonNumber = document.querySelector('#copybuttonnumber');
-const numberValue = document.querySelector('#valuenumber');
+const copyButtonMeasurement = document.querySelector('#copybuttonmeasurement');
+const measurementValue = document.querySelector('#valuemeasurement');
 
 /** ON LOAD SECTOR */
 const onLoadPage = async () => {
@@ -42,7 +42,7 @@ const onLoadPage = async () => {
     { element: currencyDisplaySelect, source: 'currencyDisplay' },
     { element: timeStyleSelect, source: 'dateTime' },
     { element: dateStyleSelect, source: 'dateTime' },
-    { element: styleSelectNumber, source: 'number' },
+    { element: unityDisplaySelect, source: 'unit' },
   ];
   await checkTheme();
   await getLocales();
@@ -94,7 +94,7 @@ const getContent = async () => {
       await showDateTimeResult();
     }, 1000);
     return undefined;
-  } else if (context === 'Number') await sanitizeNumberInput();
+  } else if (context === 'Measurement') await sanitizeMeasurementInput();
   else {
     await sanitizeCurrencyInput();
   }
@@ -103,9 +103,10 @@ const getContent = async () => {
 
 const getSelectOptions = async ({ element, source }) => {
   const dateTimeOptions = ['choose an option...', 'full', 'long', 'medium', 'short'];
-  const numberOptions = ['choose an option...', 'decimal', 'percent'];
   const currencyDisplayOptions = ['choose an option...', 'code', 'name', 'symbol'];
-  let options = source === 'number' ? numberOptions : source === 'dateTime' ? dateTimeOptions : currencyDisplayOptions;
+  const unitDisplayOptions = ['choose an option...', 'long', 'narrow', 'short'];
+  let options =
+    source === 'unit' ? unitDisplayOptions : source === 'dateTime' ? dateTimeOptions : currencyDisplayOptions;
 
   for (let i = 0; i < options.length; i++) {
     const formatedOption = options[i].slice(0, 1).toUpperCase() + options[i].slice(1);
@@ -151,10 +152,6 @@ const showCurrencyResult = async (typedValue) => {
 };
 
 const currencyCodeGenerator = async (locale, currencyFormatOptions, typedValue) => {
-  for (const key in currencyFormatOptions) {
-    // console.log(key);
-    // const element = object[key];
-  }
   let { currency, currencyDisplay } = currencyFormatOptions;
   currency = currency?.length ? `, currency: '${currency}'` : '';
   currencyDisplay = currencyDisplay?.length ? `, currencyDisplay: '${currencyDisplay}'` : '';
@@ -223,7 +220,7 @@ const copyToClipboardDatetime = async () => {
   }, 3000);
 };
 
-/** NUMBER SECTOR */
+/** MEASUREMENTS SECTOR */
 const getUnits = async () => {
   const units = Intl.supportedValuesOf('unit');
   for (let i = 0; i < units.length; i++) {
@@ -235,60 +232,57 @@ const getUnits = async () => {
   }
 };
 
-const sanitizeNumberInput = async () => {
-  numberValue.value = numberValue.value.replace(/\D/g, '') || 1000;
-  await showNumberResult(numberValue.value);
+const sanitizeMeasurementInput = async () => {
+  measurementValue.value = measurementValue.value.replace(/\D/g, '') || 1000;
+  await showMeasurementResult(measurementValue.value);
 };
 
-const showNumberResult = async (typedValue) => {
-  localeSelectNumber.value = localeSelectNumber.value.length ? localeSelectNumber.value : navigator.language;
-  const choosenLocale = localeSelectNumber.value;
-  const choosenStyle = styleSelectNumber.value;
-  //   const choosenDateStyle = dateStyleSelect.value;
-  const numberFormatOptions = {};
+const showMeasurementResult = async (typedValue) => {
+  localeSelectMeasurement.value = localeSelectMeasurement.value.length
+    ? localeSelectMeasurement.value
+    : navigator.language;
+  const choosenLocale = localeSelectMeasurement.value;
+  const choosenUnitDisplay = unityDisplaySelect.value;
+  const choosenUnit = unitsSelect.value;
+  const measurementFormatOptions = { style: 'unit' };
 
-  numberFormatOptions['style'] = choosenStyle.length ? choosenStyle : 'decimal';
-  // choosenCurrency.length ? numberFormatOptions['currency'] = choosenCurrency
+  measurementFormatOptions['unitDisplay'] = choosenUnitDisplay.length ? choosenUnitDisplay : 'long';
+  measurementFormatOptions['unit'] = choosenUnit.length ? choosenUnit : 'acre';
 
-  //   dateTimeFormatOptions['timeStyle'] = choosenTimeStyle.length ? choosenTimeStyle : 'long';
-  //   dateTimeFormatOptions['dateStyle'] = choosenDateStyle.length ? choosenDateStyle : 'long';
+  const formatedResult = Intl.NumberFormat(`${choosenLocale}`, measurementFormatOptions).format(typedValue);
 
-  const formatedResult = Intl.NumberFormat(`${choosenLocale}`, numberFormatOptions).format(typedValue);
+  resultMeasurement.innerHTML = formatedResult;
 
-  resultNumber.innerHTML = formatedResult;
-
-  await numberCodeGenerator(choosenLocale, numberFormatOptions, typedValue);
+  await measurementCodeGenerator(choosenLocale, measurementFormatOptions, typedValue);
 };
 
-const numberCodeGenerator = async (locale, numberFormatOptions, typedValue) => {
-  for (const key in numberFormatOptions) {
-    // console.log(key);
-    // const element = object[key];
-  }
-  let { style } = numberFormatOptions;
+const measurementCodeGenerator = async (locale, measurementFormatOptions, typedValue) => {
+  let { style, unitDisplay, unit } = measurementFormatOptions;
   style = `style: '${style}'`;
-  resultCodeNumber.innerHTML = `Intl.NumberFormat('${locale}', { ${style} }).format(${typedValue})`;
+  unitDisplay = `unitDisplay: '${unitDisplay}'`;
+  unit = `unit: '${unit}'`;
+  resultCodeMeasurement.innerHTML = `Intl.NumberFormat('${locale}', { ${style}, ${unitDisplay}, ${unit} }).format(${typedValue})`;
 };
 
-const copyToClipboardNumber = async () => {
-  navigator.clipboard.writeText(resultCodeNumber.value);
-  copyButtonNumber.classList.add('btn-secondary');
-  copyButtonNumber.innerHTML = 'Copied';
-  copyButtonNumber.setAttribute('disabled', 'true');
+const copyToClipboardMeasurement = async () => {
+  navigator.clipboard.writeText(resultCodeMeasurement.value);
+  copyButtonMeasurement.classList.add('btn-secondary');
+  copyButtonMeasurement.innerHTML = 'Copied';
+  copyButtonMeasurement.setAttribute('disabled', 'true');
   setTimeout(() => {
-    copyButtonNumber.classList.remove('btn-secondary');
-    copyButtonNumber.innerHTML = 'Copy';
-    copyButtonNumber.removeAttribute('disabled');
+    copyButtonMeasurement.classList.remove('btn-secondary');
+    copyButtonMeasurement.innerHTML = 'Copy';
+    copyButtonMeasurement.removeAttribute('disabled');
   }, 3000);
 };
 
 /** UTILS SECTOR */
 const clearFields = () => {
   resultCodeDatetime.innerHTML = '';
-  resultCodeNumber.innerHTML = '';
+  resultCodeMeasurement.innerHTML = '';
   resultCodeCurrency.innerHTML = '';
   currencyValue.value = 1000;
-  numberValue.value = 1000;
+  measurementValue.value = 1000;
   resultDateTime.innerHTML = 'Result will be shown here...';
   for (let i = 1; i < allSelects.length; i++) {
     allSelects[i].selectedIndex = 0;
