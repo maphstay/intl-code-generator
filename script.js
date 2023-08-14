@@ -26,15 +26,15 @@ const resultDateTime = document.querySelector('#resultdatetime');
 const resultCodeDatetime = document.querySelector('#resultcodedatetime');
 const copyButtonDatetime = document.querySelector('#copybuttondatetime');
 
-/** NUMBERS */
-const numberContent = document.querySelector('#number-content');
-const localeSelectNumber = document.querySelector('#localesnumber');
-const resultNumber = document.querySelector('#resultnumber');
-const resultCodeNumber = document.querySelector('#resultcodenumber');
+/** MEASUREMENTS */
+const measurementContent = document.querySelector('#measurement-content');
+const localeSelectMeasurement = document.querySelector('#localesmeasurement');
+const resultMeasurement = document.querySelector('#resultmeasurement');
+const resultCodeMeasurement = document.querySelector('#resultcodemeasurement');
 const unityDisplaySelect = document.querySelector('#unitdisplay');
 const unitsSelect = document.querySelector('#units');
-const copyButtonNumber = document.querySelector('#copybuttonnumber');
-const numberValue = document.querySelector('#valuenumber');
+const copyButtonMeasurement = document.querySelector('#copybuttonmeasurement');
+const measurementValue = document.querySelector('#valuemeasurement');
 
 /** ON LOAD SECTOR */
 const onLoadPage = async () => {
@@ -94,7 +94,7 @@ const getContent = async () => {
       await showDateTimeResult();
     }, 1000);
     return undefined;
-  } else if (context === 'Number') await sanitizeNumberInput();
+  } else if (context === 'Measurement') await sanitizeMeasurementInput();
   else {
     await sanitizeCurrencyInput();
   }
@@ -220,7 +220,7 @@ const copyToClipboardDatetime = async () => {
   }, 3000);
 };
 
-/** NUMBER SECTOR */
+/** MEASUREMENTS SECTOR */
 const getUnits = async () => {
   const units = Intl.supportedValuesOf('unit');
   for (let i = 0; i < units.length; i++) {
@@ -232,55 +232,57 @@ const getUnits = async () => {
   }
 };
 
-const sanitizeNumberInput = async () => {
-  numberValue.value = numberValue.value.replace(/\D/g, '') || 1000;
-  await showNumberResult(numberValue.value);
+const sanitizeMeasurementInput = async () => {
+  measurementValue.value = measurementValue.value.replace(/\D/g, '') || 1000;
+  await showMeasurementResult(measurementValue.value);
 };
 
-const showNumberResult = async (typedValue) => {
-  localeSelectNumber.value = localeSelectNumber.value.length ? localeSelectNumber.value : navigator.language;
-  const choosenLocale = localeSelectNumber.value;
+const showMeasurementResult = async (typedValue) => {
+  localeSelectMeasurement.value = localeSelectMeasurement.value.length
+    ? localeSelectMeasurement.value
+    : navigator.language;
+  const choosenLocale = localeSelectMeasurement.value;
   const choosenUnitDisplay = unityDisplaySelect.value;
   const choosenUnit = unitsSelect.value;
-  const numberFormatOptions = { style: 'unit' };
+  const measurementFormatOptions = { style: 'unit' };
 
-  numberFormatOptions['unitDisplay'] = choosenUnitDisplay.length ? choosenUnitDisplay : 'long';
-  numberFormatOptions['unit'] = choosenUnit.length ? choosenUnit : 'acre';
+  measurementFormatOptions['unitDisplay'] = choosenUnitDisplay.length ? choosenUnitDisplay : 'long';
+  measurementFormatOptions['unit'] = choosenUnit.length ? choosenUnit : 'acre';
 
-  const formatedResult = Intl.NumberFormat(`${choosenLocale}`, numberFormatOptions).format(typedValue);
+  const formatedResult = Intl.NumberFormat(`${choosenLocale}`, measurementFormatOptions).format(typedValue);
 
-  resultNumber.innerHTML = formatedResult;
+  resultMeasurement.innerHTML = formatedResult;
 
-  await numberCodeGenerator(choosenLocale, numberFormatOptions, typedValue);
+  await measurementCodeGenerator(choosenLocale, measurementFormatOptions, typedValue);
 };
 
-const numberCodeGenerator = async (locale, numberFormatOptions, typedValue) => {
-  let { style, unitDisplay, unit } = numberFormatOptions;
+const measurementCodeGenerator = async (locale, measurementFormatOptions, typedValue) => {
+  let { style, unitDisplay, unit } = measurementFormatOptions;
   style = `style: '${style}'`;
   unitDisplay = `unitDisplay: '${unitDisplay}'`;
   unit = `unit: '${unit}'`;
-  resultCodeNumber.innerHTML = `Intl.NumberFormat('${locale}', { ${style}, ${unitDisplay}, ${unit} }).format(${typedValue})`;
+  resultCodeMeasurement.innerHTML = `Intl.NumberFormat('${locale}', { ${style}, ${unitDisplay}, ${unit} }).format(${typedValue})`;
 };
 
-const copyToClipboardNumber = async () => {
-  navigator.clipboard.writeText(resultCodeNumber.value);
-  copyButtonNumber.classList.add('btn-secondary');
-  copyButtonNumber.innerHTML = 'Copied';
-  copyButtonNumber.setAttribute('disabled', 'true');
+const copyToClipboardMeasurement = async () => {
+  navigator.clipboard.writeText(resultCodeMeasurement.value);
+  copyButtonMeasurement.classList.add('btn-secondary');
+  copyButtonMeasurement.innerHTML = 'Copied';
+  copyButtonMeasurement.setAttribute('disabled', 'true');
   setTimeout(() => {
-    copyButtonNumber.classList.remove('btn-secondary');
-    copyButtonNumber.innerHTML = 'Copy';
-    copyButtonNumber.removeAttribute('disabled');
+    copyButtonMeasurement.classList.remove('btn-secondary');
+    copyButtonMeasurement.innerHTML = 'Copy';
+    copyButtonMeasurement.removeAttribute('disabled');
   }, 3000);
 };
 
 /** UTILS SECTOR */
 const clearFields = () => {
   resultCodeDatetime.innerHTML = '';
-  resultCodeNumber.innerHTML = '';
+  resultCodeMeasurement.innerHTML = '';
   resultCodeCurrency.innerHTML = '';
   currencyValue.value = 1000;
-  numberValue.value = 1000;
+  measurementValue.value = 1000;
   resultDateTime.innerHTML = 'Result will be shown here...';
   for (let i = 1; i < allSelects.length; i++) {
     allSelects[i].selectedIndex = 0;
